@@ -1,21 +1,20 @@
-import java.util.ArrayList;
-
 public class TrieNode {
-    private boolean endOfWord;
+    private boolean isEndOfWord;
     private TrieNode[] sons;
 
     public TrieNode(){
-        endOfWord = false;
+        sons = new TrieNode[Trie.ALPHABET];
+        isEndOfWord = false;
         for(int i = 0; i < Trie.ALPHABET; i++)
             sons[i] = null;
     }
 
     public boolean isEndOfWord() {
-        return endOfWord;
+        return isEndOfWord;
     }
 
     public void setEndOfWord(boolean endOfWord) {
-        this.endOfWord = endOfWord;
+        this.isEndOfWord = endOfWord;
     }
 
     public TrieNode[] getSons() {
