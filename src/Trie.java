@@ -1,5 +1,5 @@
 public class Trie {
-    public static final int MAX_CHAR = 26;
+    public static final int MAX_CHAR = 256;
     private TrieNode root;
 
     public Trie() {
@@ -14,7 +14,7 @@ public class Trie {
         // Depth control of the word
         for(lvl = 0; lvl < lenght; lvl++){
 
-            index = key.charAt(lvl) - 'a';
+            index = key.charAt(lvl);
             if(actual.getSons()[index] == null)
                 actual.getSons()[index] = new TrieNode();
 
@@ -34,7 +34,7 @@ public class Trie {
         // Depth control of the word
         for(lvl = 0; lvl < lenght; lvl++){
 
-            index = key.charAt(lvl) - 'a';
+            index = key.charAt(lvl);
             if(actual.getSons()[index] == null)
                 found = false;
 
@@ -47,46 +47,39 @@ public class Trie {
             return actual != null && actual.isEndOfWord();
     }
 
-    //Recursive function to delete a key
-    public TrieNode remove(TrieNode n, String key, int depth){
+   public void remove_T(String key){
+        remove(root, key, 0);
+   }
 
-        if(n == null)
-            return null;
+   public boolean remove(TrieNode n, String key, int index){
 
-        //Last character is being processed
-        if(depth == key.length()){
-
-            //This node is no more end of word
-            if(n.isEndOfWord())
-                n.setEndOfWord(false);
-            if(isEmpty(n))
-                n = null;
-
-            return n;
+        if(index == key.length()) {
+            if (!n.isEndOfWord())
+                return false;
+            n.setEndOfWord(false);
+            return n.getSons().length == 0;
         }   //if
 
-        //If not last character, go over the childs
-        int index;
-        if(key.charAt(depth) >= 'A' && key.charAt(depth) <= 'Z' )
-            index = key.charAt(depth) - 'a';
-        else
-            index = key.charAt(depth);
+       char character = key.charAt(index);
 
-        n.getSons()[index] = remove(n.getSons()[index], key, depth + 1);
+        if (n.getSons()[key.charAt(index)] == null)
+            return false;
 
-        //Root does not have any child and its not end of word
-        if(isEmpty(n) && !n.isEndOfWord())
-            n = null;
+        boolean shouldDeleteThisNode = remove(n.getSons()[key.charAt(index)], key, index + 1);
 
-        return n;
+        if(shouldDeleteThisNode){
+            n.getSons()[character] = null;
+            return n.getSons().length == 0;
+        }   //if
+
+       return false;
+   }
+
+    public TrieNode getRoot() {
+        return root;
     }
 
-    //If node has no children true, if not false
-    public boolean isEmpty(TrieNode n){
-        for(int i = 0; i <   MAX_CHAR; i++){
-            if(n.getSons()[i] == null)
-                return false;
-        }   //for
-        return true;
+    public void setRoot(TrieNode root) {
+        this.root = root;
     }
 }
